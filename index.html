@@ -25,10 +25,10 @@ client.connect({onSuccess:onConnect});
 function onConnect() {
   // Once a connection has been made, make a subscription and send a message.
   console.log("onConnect");
-  client.subscribe("tw/iot/0204");
-  message = new Paho.MQTT.Message("Hello I am fine");
-  message.destinationName = "tw/iot/0204";
-  client.send(message);
+  // client.subscribe("tw/iot/0204");
+ // message = new Paho.MQTT.Message("Hello I am fine");
+ // message.destinationName = "tw/iot/0204";
+  //client.send(message);
 }
 
 // called when the client loses its connection
@@ -41,9 +41,46 @@ function onConnectionLost(responseObject) {
 // called when a message arrives
 function onMessageArrived(message) {
   console.log("onMessageArrived:"+message.payloadString);
+  var output = document.getElementById("txtMsgs");
+  output.innerHTML = message.payloadString + "<br>" +output.innerHTML   ;
+  
 }
-
+function subTopic( )
+{ 
+    var topic = document.getElementById("txtSubTopics").value;
+    client.subscribe(topic);
+    console.log(topic);
+};
+function pubTopic( )
+{ 
+    var topic = document.getElementById("txtPubTopics").value;
+    var msg = document.getElementById("txtPubMsg").value;
+    message = new Paho.MQTT.Message(msg);
+  message.destinationName = topic;
+  client.send(message);
+   // alert("OK") 
+};
 </script>
+
+
+ 主題: 
+ <input type="text"
+ id="txtSubTopics" >
+ <input type="button" value="定閱" id="btnSubTopic" onclick="subTopic()"><hr>
+
+ 主題: 
+ <input type="text"
+ id="txtPubTopics" > <br>
+ 訊息: 
+ <input type="text"
+ id="txtPubMsg" >
+ <input type="button" value="發送" id="btnSubTopic" onclick="pubTopic()" ><hr>
+ 訊息列
+  <!-- <input type="text" id="txtMsgs"> -->
+ <div id="txtMsgs"></div>
+
+ </div>
+
 
 </body>
 </html>
